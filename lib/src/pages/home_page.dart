@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peliculas/src/pages/widgets/card_swiper_widget.dart';
+import 'package:peliculas/src/providers/movies_provider.dart';
+import 'package:peliculas/src/widgets/card_swiper_widget.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -23,7 +24,11 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _swiperCards() {
+    final moviesProvider = new MoviesProvider();
+    moviesProvider.getNowInCinemas();
 
-    return CardSwiper(movies: [1,2,3,4]);
+    return CardSwiper(
+      movies: [1,2,3,4]
+      );
   }
 }
