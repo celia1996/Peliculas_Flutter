@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peliculas/src/providers/movies_provider.dart';
 import 'package:peliculas/src/widgets/card_swiper_widget.dart';
+import 'package:peliculas/src/widgets/movie_horizontal.dart';
 
 class HomePage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
@@ -21,11 +22,8 @@ class HomePage extends StatelessWidget {
         ),
         body: Container(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _swiperCards(),
-            _footer(context)
-            ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[_swiperCards(), _footer(context)],
         )));
   }
 
@@ -35,34 +33,36 @@ class HomePage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           return CardSwiper(movies: snapshot.data);
-        }else{
+        } else {
           return Container(
-            height: 400.0,
-            child: Center(
-              child: CircularProgressIndicator()
-              )
-              );
+              height: 400.0, child: Center(child: CircularProgressIndicator()));
         }
       },
     );
   }
 
-  Widget _footer( BuildContext context) {
+  Widget _footer(BuildContext context) {
     return Container(
-      width: double.infinity,
-      child: Column(
-        children: <Widget>[
-          Text('Populares', style: Theme.of(context).textTheme.subtitle2),
-          FutureBuilder(
-            future: moviesProvider.getPopularMovies(),
-            builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-              
-              snapshot.data?.forEach((movie) => print(movie.title));
-              return Container() ;
-            },
-          ),
-        ],
-      )
-    );
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text('Populares', style: Theme.of(context).textTheme.subtitle2)),
+            SizedBox(height: 5.0),
+            
+            FutureBuilder(
+              future: moviesProvider.getPopularMovies(),
+              builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+                if (snapshot.hasData) {
+                  return MovieHorizontal(movies: snapshot.data);
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+          ],
+        ));
   }
 }
